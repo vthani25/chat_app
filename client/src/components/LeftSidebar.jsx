@@ -8,6 +8,7 @@ const LeftSidebar = ({selectedUser, setSelectedUser}) => {
 
   return (
     <div className = {`bg-[#8185B2]/10 h-full p-5 rounded-r-xl overflow-y-scroll text-white ${selectedUser ? "max-md:hidden": ""}`}>
+        {/*logo and menu bar on the left) */}
         <div className='pb-5'>
             <div className='flex justify-between items-center'>
                 <img src={assets.logo} alt="logo" className='max-w-40' />
@@ -22,6 +23,7 @@ const LeftSidebar = ({selectedUser, setSelectedUser}) => {
             </div>
 
             <div className = 'bg-[#282142] rounded-full flex items-center gap-2 py-3 px-4 mt-5'>
+                {/*create search bar) */}
                 <img src={assets.search_icon} alt="" className='w-3'/>
                 <input type="text" className='bg-transparent border-none outline-none text-white text-xs placeholder-[#c8c8c8] flex-1' placeholder='Search User...'/>
             </div>
@@ -29,6 +31,7 @@ const LeftSidebar = ({selectedUser, setSelectedUser}) => {
         </div>
 
         <div className='flex flex-col'>
+            {/*show list of users, profile pic, and status */}
             {userDummyData.map((user, index)=>(
             <div onClick={()=>{setSelectedUser(user)}}
             key={index} className={`relative flex items-center gap-2 p-2 pl-4 rounded cursor-pointer max-sm:text-sm ${selectedUser?._id === user._id && 'bg-[#282142]/50'}`}>
@@ -42,6 +45,7 @@ const LeftSidebar = ({selectedUser, setSelectedUser}) => {
                         : <span className='text-neutral-400 text-xs'>Offline</span>
                     }
                 </div>
+                {/*circle with number of messages */}
                 {index > 2 && <p className='absolute top-4 right-4 text-xs h-5 w-5 flex justify-center items-center rounded-full bg-violet-500/50'>{index}</p>}
             </div>
             ))}

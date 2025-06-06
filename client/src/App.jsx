@@ -7,7 +7,7 @@ import ProfilePage from './pages/profilePage'
 const App = () => {
   return (
     <div className="bg-[url('./src/assets/bgImage.svg')] bg-contain">
-
+      {/*route to different pages*/}
       <Routes>
         <Route path= '/' element={<Homepage/>}/>
         <Route path='/login' element={<LoginPage/>}/>
