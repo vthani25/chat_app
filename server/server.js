@@ -11,6 +11,13 @@ import {Server} from "socket.io";
 const app = express();
 const server = http.createServer(app);
 
+app.use(cors({
+    origin: [
+    "http://localhost:5172",
+    "https://chat-app-frontend-chi-puce.vercel.app"
+  ]}
+))
+
 //Initialize socket.io server
 export const io = new Server(server, {cors: {origin: "*"}})
 
@@ -36,7 +43,6 @@ io.on("connection", (socket)=>{
 
 //Middleware Setup
 app.use(express.json({limit: "4mb"}))
-app.use(cors())
 
 //create routes
 app.use("/api/status", (req, res)=> res.send("Server is live"));
