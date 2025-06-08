@@ -16,8 +16,8 @@ const Homepage = () => {
         : 'md:grid-cols-2'
       }`}>
         {/* change col size for container s based on selection */}
-        <LeftSidebar selectedUser={selectedUser} setSelectedUser={setSelectedUser}/>
-        <ChatContainer selectedUser={selectedUser} setSelectedUser={setSelectedUser}/>
+        <LeftSidebar/>
+        <ChatContainer/>
         <RightSidebar selectedUser={selectedUser} setSelectedUser={setSelectedUser}/>
       </div>
     </div>
