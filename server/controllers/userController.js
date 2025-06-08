@@ -37,7 +37,11 @@ export const login = async (req, res) => {
         const {email, password} = req.body
         const userData = await User.findOne({email})
 
-        const isPasswordCorrect = await bycrypt.compare(password, userData.password)
+        if (!userData) {
+            return res.json({ success: false, message: "Invalid credentials" });
+        }
+
+        const isPasswordCorrect = await bcrypt.compare(password, userData.password)
         if (!isPasswordCorrect){
            return res.json({success:false, message:"Invalid Credentials"})}
            
@@ -58,7 +62,7 @@ export const checkAuth = (req, res) =>{
 //Update user profile details
 export const updateProfile = async (req, res)=>{
     try {
-        const {profilePic, bip, fullName} = req.body
+        const {profilePic, bio, fullName} = req.body
         const userId = req.user._id;
         let updatedUser;
 
