@@ -37,7 +37,7 @@ const ChatContainer = () => {
   //Handle sending images
   const handleSendImage = async(e) => {
     const file = e.target.files[0];
-    if(!file || !file.type.startswith("image/")){
+    if(!file || !file.type.startsWith("image/")){
       toast.error("Select a valid image file.")
       return ;
     }
@@ -74,7 +74,7 @@ const ChatContainer = () => {
             )}
             <div className="text-center text-xs">
                 {/*show hour:min underneath icon */}
-                <img src={msg.senderId === authUser._id ? authUser?.profilePic || assets.avatar_icon : assets.selectedUser?.profilePic || assets.avatar_icon} alt="" className="w-7 rounded-full"/>
+                <img src={msg.senderId === authUser._id ? authUser?.profilePic || assets.avatar_icon : selectedUser?.profilePic || assets.avatar_icon} alt="" className="w-7 rounded-full"/>
                 <p className='text-gray-500'>{formatMessageTime(msg.createdAt)}</p>
             </div>
             </div>
@@ -89,7 +89,7 @@ const ChatContainer = () => {
             type="text" placeholder="Send a message" className='flex-1 text-sm p-3 border-none rounded-lg outline-none text-white placeholder-gray-400'/>
             {/*show file selection box after clicking on gallery icon*/}
             <input onChange = {handleSendImage}
-            type="file" id="image" accept="image/png, image/jpeg" hidden/>
+            type="file" id="image" accept="image/png, image/jpeg, image/jpg" hidden/>
             <label htmlFor="image"> 
                 <img src={assets.gallery_icon} alt="" className="w-5 mr-2 cursor-pointer"/>
             </label>
