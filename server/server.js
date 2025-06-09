@@ -11,15 +11,7 @@ import {Server} from "socket.io";
 const app = express();
 const server = http.createServer(app);
 
-app.use(cors({
-    origin: [
-    "http://localhost:5172",
-    "https://chat-app-frontend-chi-puce.vercel.app"
-  ],
-  credentials:true, 
-  optionsSuccessStatus: 200}
-))
-
+app.use(cors())
 
 //Initialize socket.io server
 export const io = new Server(server, {cors: {origin: "*"}})
