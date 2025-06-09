@@ -31,6 +31,7 @@ export const AuthProvider = ({children})=>{
 
     //Login function to hander user authentication and socket connection
     const login = async (state, credentials)=> {
+
         try{
             const {data} = await axios.post(`/api/auth/${state}`, credentials);
             if (data.success){
@@ -90,6 +91,7 @@ export const AuthProvider = ({children})=>{
     }
 
     useEffect(() => {
+    axios.defaults.withCredentials=true;
     if (token) {
         axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
     }

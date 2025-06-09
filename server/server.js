@@ -16,8 +16,10 @@ app.use(cors({
     "http://localhost:5172",
     "https://chat-app-frontend-chi-puce.vercel.app"
   ],
-    credentials:true}
+  credentials:true, 
+  optionsSuccessStatus: 200}
 ))
+
 
 //Initialize socket.io server
 export const io = new Server(server, {cors: {origin: "*"}})
