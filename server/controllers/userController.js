@@ -23,9 +23,10 @@ export const SignUp = async (req, res)=>{
         const newUser = await User.create({fullName, email, password: hashedPassword, bio})
 
         const token = generateToken(newUser._id)
-        res.setHeader("Access-Control-Allow-Origin", "*"); // Be cautious with ""
-        res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
+        res.setHeader("Access-Control-Allow-Origin", "*");
+        res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
         res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
+        res.setHeader("Access-Control-Allow-Credentials", "true");
         res.json({success: true, userData: newUser, token, message: "Account created successfully"})
 
     } catch (error) {
@@ -50,9 +51,10 @@ export const login = async (req, res) => {
            
         const token = generateToken(userData._id)
 
-        res.setHeader("Access-Control-Allow-Origin", "*"); // Be cautious with ""
-        res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
+        res.setHeader("Access-Control-Allow-Origin", "*");
+        res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
         res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
+        res.setHeader("Access-Control-Allow-Credentials", "true");
         res.json({success: true, userData, token, message: "Login successful"})
     }
     catch(error){

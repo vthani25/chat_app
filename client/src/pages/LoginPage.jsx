@@ -74,7 +74,7 @@ const LoginPage = () => {
       {/* checkbox for privacy policy*/}
       <div className='flex items-center gap-2 text-sm text-gray-500'>
         <input type="checkbox" />
-        <p>Agree to the terms of use and privacy policy</p>
+        <p>Agree for testing</p>
       </div>
 
       <div className={'flex flex-col gap-2'}>
