@@ -11,12 +11,7 @@ import {Server} from "socket.io";
 const app = express();
 const server = http.createServer(app);
 
-app.use(cors({
-    origin: "https://chat-app-frontend-chi-puce.vercel.app",
-    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"], // Added "OPTIONS"
-    allowedHeaders: ["Content-Type", "Authorization"],
-    credentials: true
-}));
+app.use(cors());
 
 
 
