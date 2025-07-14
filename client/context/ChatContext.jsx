@@ -22,6 +22,7 @@ export const ChatProvider = ({children})=>{
                 setUnseenMessages(data.unseenMessages)
             }
         } catch (error) {
+            console.error("Error fetching users for sidebar:", error);
             toast.error(error.message)
         }
     }

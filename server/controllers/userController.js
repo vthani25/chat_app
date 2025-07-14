@@ -27,7 +27,7 @@ export const SignUp = async (req, res) => {
       bio
     });
 
-    const token = generateToken({ id: newUser._id }, "1d"); // add expiry inside helper
+    const token = generateToken(newUser._id); 
     const user = newUser.toObject();
     delete user.password;
 
@@ -52,7 +52,7 @@ export const login = async (req, res) => {
       return res.status(401).json({ success: false, message: "Invalid credentials" });
     }
 
-    const token = generateToken({ id: user._id }, "1d");
+    const token = generateToken(user._id);
     const safeUser = user.toObject();
     delete safeUser.password;
 
