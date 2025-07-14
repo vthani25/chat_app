@@ -4,6 +4,7 @@ import cloudinary from "../lib/cloudinary.js";
 import {io, userSocketMap} from "../server.js";
 
 
+
 //Get all messages sent and received previously
 export const getMessages = async(req,res) => {
     try{

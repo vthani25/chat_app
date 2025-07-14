@@ -4,64 +4,64 @@ import User from "../models/User.js";
 import bcrypt from "bcryptjs";
 
 // Sign Up A New User
-export const SignUp = async (req, res)=>{
-    const {fullName, email, password, bio} = req.body;
+export const SignUp = async (req, res) => {
+  try {
+    const { fullName, email, password, bio } = req.body || {};
 
-    try{
-        if (!fullName || !email || !password || !bio ){
-            return res.json({success:false, message: "Missing Details"})
-        }
-
-        const user = await User.findOne({email});
-        if (user) {
-             return res.json({success:false, message: "Account already exists"})
-        }
-
-        const salt = await bcrypt.genSalt(10)
-        const hashedPassword = await bcrypt.hash(password, salt);
-
-        const newUser = await User.create({fullName, email, password: hashedPassword, bio})
-
-        const token = generateToken(newUser._id)
-        res.setHeader("Access-Control-Allow-Origin", "*");
-        res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
-        res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
-        res.setHeader("Access-Control-Allow-Credentials", "true");
-        res.json({success: true, userData: newUser, token, message: "Account created successfully"})
-
-    } catch (error) {
-        console.log(error.message)
-        res.json({success:false, message: error.message})
+    if (!fullName || !email || !password || !bio) {
+      return res.status(400).json({ success: false, message: "Missing details" });
     }
-}
 
+    const existing = await User.findOne({ email: email.toLowerCase().trim() });
+    if (existing) {
+      return res.status(409).json({ success: false, message: "Account already exists" });
+    }
+
+    const saltRounds = parseInt(process.env.BCRYPT_SALT || "10", 10);
+    const hashedPassword = await bcrypt.hash(password, saltRounds);
+
+    const newUser = await User.create({
+      fullName,
+      email: email.toLowerCase().trim(),
+      password: hashedPassword,
+      bio
+    });
+
+    const token = generateToken({ id: newUser._id }, "1d"); // add expiry inside helper
+    const user = newUser.toObject();
+    delete user.password;
+
+    res.status(201).json({ success: true, user, token, message: "Account created" });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ success: false, message: "Server error" });
+  }
+};
 //Login a user
 export const login = async (req, res) => {
-    try{
-        const {email, password} = req.body
-        const userData = await User.findOne({email})
+  try {
+    const { email, password } = req.body || {};
 
-        if (!userData) {
-            return res.json({ success: false, message: "Invalid credentials" });
-        }
-
-        const isPasswordCorrect = await bcrypt.compare(password, userData.password)
-        if (!isPasswordCorrect){
-           return res.json({success:false, message:"Invalid Credentials"})}
-           
-        const token = generateToken(userData._id)
-
-        res.setHeader("Access-Control-Allow-Origin", "*");
-        res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
-        res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
-        res.setHeader("Access-Control-Allow-Credentials", "true");
-        res.json({success: true, userData, token, message: "Login successful"})
+    const user = await User.findOne({ email: email.toLowerCase().trim() });
+    if (!user) {
+      return res.status(401).json({ success: false, message: "Invalid credentials" });
     }
-    catch(error){
-        console.log(error.message)
-        res.json({success:false, message: error.message})
+
+    const match = await bcrypt.compare(password, user.password);
+    if (!match) {
+      return res.status(401).json({ success: false, message: "Invalid credentials" });
     }
-}
+
+    const token = generateToken({ id: user._id }, "1d");
+    const safeUser = user.toObject();
+    delete safeUser.password;
+
+    res.json({ success: true, user: safeUser, token, message: "Login successful" });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ success: false, message: "Server error" });
+  }
+};
 
 //Check if user is authenticated
 export const checkAuth = (req, res) =>{
@@ -69,22 +69,23 @@ export const checkAuth = (req, res) =>{
 }
 
 //Update user profile details
-export const updateProfile = async (req, res)=>{
-    try {
-        const {profilePic, bio, fullName} = req.body
-        const userId = req.user._id;
-        let updatedUser;
+export const updateProfile = async (req, res) => {
+  try {
+    const { profilePic, bio, fullName } = req.body || {};
+    const update = {};
+    if (bio) update.bio = bio;
+    if (fullName) update.fullName = fullName;
 
-        if (!profilePic){
-            updatedUser = await User.findByIdAndUpdate(userId, {bio, fullName}, {new: true})
-        } else {
-            const upload = await cloudinary.uploader.upload(profilePic);
-            updatedUser = await User.findByIdAndUpdate(userId, {profilePic: upload.secure_url, bio, fullName}, {new: true})
-        }
-
-        res.json({success: true, user:updatedUser})
-    } catch (error) {
-        console.log(error.message)
-        res.json({success: true, message: error.message})
+    if (profilePic) {
+      const upload = await cloudinary.uploader.upload(profilePic, { folder: "avatars" });
+      update.profilePic = upload.secure_url;
     }
-}
+
+    const user = await User.findByIdAndUpdate(req.user._id, update, { new: true })
+                           .select("-password");
+    res.json({ success: true, user });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ success: false, message: "Server error" });
+  }
+};
