@@ -31,8 +31,6 @@ Built with:
 
 ---
 
-
-
 | 📸 Screenshots |
 |------------------------|
 | **Sign Up/Log In** |
@@ -42,5 +40,33 @@ Built with:
 | **Update Profile** |
 | ![Profile](https://hc-cdn.hel1.your-objectstorage.com/s/v3/723e9480d5138d867424e12a92db0497b843a7f5_image.png) |
 
+---
+
+### 🔧 Running Locally
+
+Want to try QuickChat on your own machine? Follow these steps:
+
+1. **Clone the repository**
+
+```bash
+git clone https://github.com/vthani25/chat_app.git
+cd chat_app
+```
+
+2. **Start the server**
+```bash
+cd server
+npm install
+# Create a .env file with your MongoDB URI, JWT secret, and Cloudinary credentials
+npm start
+```
+2. **Run the frontend**
+```bash
+cd client
+npm install
+# Create a .env file with: VITE_BACKEND_URL=http://localhost:5000
+npm run dev
+```
+Now it'll be running on your localhost as well!
 
 ---
